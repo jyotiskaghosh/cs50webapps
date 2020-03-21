@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}book{% endblock %}
+{% block body %}
+<h1>{{book.title}}</h1>
+<p>isbn: {{book.isbn}}</p>
+<p>author: {{book.author}}</p>
+<p>publication year: {{book.year}}</p>
+<p>average rating: {{book.average_score}}</p>
+<p>ratings count: {{book.review_count}}</p>
+<p>goodreads average rating: {{goodreads_review["books"][0]["average_rating"]}}</p>
+<p>goodreads ratings count: {{goodreads_review["books"][0]["ratings_count"]}}</p>
+<h3>Reviews:</h3>
+{% for review in reviews %}
+<h5>{{review.username}}</h5>
+<p>{{review.review}}</p>
+{% endfor %}
+{% if self_review %}
+    <h3>You</h3>
+    <p>rating: {{self_review.rating}}</p>
+    <p>review: {{self_review.review}}</p>
+{% endif %}  
+    <h2>Give review</h2>
+    <form action="{{ url_for('searchBook', isbn=book.isbn) }}" method="post">
+
+        <div class="form-group">
+            <select class="form-control" name="rating">
+                {% for i in range(1,6) %}
+                    <option value="{{i}}">{{i}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <input class="form-control" name="review" placeholder="review">
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary">Submit</button>
+        </div>
+
+    </form>
+  
+{% endblock %}
