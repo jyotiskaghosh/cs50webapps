@@ -1,0 +1,5 @@
+Flask
+Flask-SocketIO
+functools
+flask_session
+datetime

@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block title %}
+Signup
+{% endblock %}
+{% block head %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // By default, submit button is disabled
+        document.querySelector('#submit').disabled = true;
+
+        // Enable button only if there is text in the input field
+        document.querySelector('#name').onkeyup = () => {
+            if (document.querySelector('#name').value.length > 0)
+                document.querySelector('#submit').disabled = false;
+            else
+                document.querySelector('#submit').disabled = true;
+        };
+        
+        document.querySelector('#password').onkeyup = () => {
+            if (document.querySelector('#password').value.length > 0)
+                document.querySelector('#submit').disabled = false;
+            else
+                document.querySelector('#submit').disabled = true;
+        };
+    });
+</script>
+{% endblock %}
+{% block body %}
+<h1>Signup</h1>
+
+    <form action="{{ url_for('signup') }}" method="post">
+
+        <div class="form-group">
+            <input class="form-control" id="name" name="name" placeholder="Username">
+        </div>
+
+        <div class="form-group">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary" id="submit">Signup</button>
+        </div>
+
+    </form>
+    <p>{{error}}</p>
+{% endblock %}

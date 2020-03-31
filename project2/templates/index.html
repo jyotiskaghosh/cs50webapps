@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %}
+Flack
+{% endblock %}
+{% block head %}
+
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+{% if new_channel|length > 0 %}
+<script>
+    if(confirm("New channel created! Do you want to visit {{new_channel}}?"))
+    {
+        window.location.href = "{{url_for('channel', title=new_channel)}}";
+    }
+</script>
+{% endif %}
+{% endblock %}
+{% block body %}
+
+{% if 'user' in session %}
+<form action="{{ url_for('index') }}" method="post" id="create-form">
+
+    <div class="form-group">
+        <input class="form-control" name="title" placeholder="Channel title (avoid using space)" id="text" type="text">
+    </div>
+    
+    <div class="form-group">
+        <button class="btn btn-primary" id="submit">Submit</button>
+    </div>
+
+</form>
+<p>{{error}}</p>
+{% endif %}
+
+<ul>
+{% for channel in channels %}
+    <li><a href="{{ url_for('channel', title=channel['title']) }}">{{channel['title']}}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}
