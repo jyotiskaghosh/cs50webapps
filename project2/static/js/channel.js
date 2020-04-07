@@ -6,8 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Connect to websocket
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port); 
 
-    socket.emit('load', {'title': title});
-
     document.querySelector('#home').addEventListener('click', () => {
         localStorage.removeItem('last-visited');
     })
@@ -40,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', event => {
         const element = event.target;
         if (element.className === 'delete') {
-            let id = element.parentElement.querySelector(".text_id").value;
+            let id = element.parentElement.getAttribute('data-id');
             pop_message(element.parentElement);
             socket.emit('delete', {'title': title, 'id': id}); 
         }
@@ -48,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // When a message is received check if it's meant for this channel if yes add message
     socket.on('message', data => {
+
         if (data.title === title)
         {   
             add_message(data);
@@ -57,16 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // on load add messages from channel
-    socket.on('load', data => {
-        
-        if (data.length > 100)
-            var messages = data.slice(-100);
-        else
-            var messages = data;
+    // When a message is received check if it's meant for this channel if yes add message
+    socket.on('delete', data => {
 
-        messages.forEach(add_message);
-
+        if (data.title === title)
+        {   
+            element = document.querySelector(`[data-id="${data.id}"]`);
+            pop_message(element);
+        }
     });
 
     // Add a new post with given contents to DOM.

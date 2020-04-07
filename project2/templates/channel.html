@@ -11,33 +11,42 @@
 
 <script>
     const user = "{{session['user']}}";
-    const title = "{{channel['title']}}";
+    const title = "{{channel['title']}}"; 
 </script>
 
 <script id="message" type="text/x-handlebars-template">
-        <div class="text-box">
-            {% raw -%}
-            {{ user }} {{timestamp}}
-            <input type="hidden" class="text_id" value="{{id}}">
-            <p class="text">{{ text }}</p>
-            {%- endraw %}
-        </div>
+    {% raw -%}
+    <div class="text-box" data-id={{id}}>
+        {{ user }} {{timestamp}}
+        <p class="text">{{ text }}</p>
+    </div>
+    {%- endraw %}
 </script>
 
 <script id="my-message" type="text/x-handlebars-template">
-    <div class="text-box">
-        {% raw -%}
+    {% raw -%}
+    <div class="text-box" data-id="{{id}}">
         {{ user }} {{timestamp}}<button class="delete">delete</button>
-        <input type="hidden" class="text_id" value="{{id}}">
         <p class="text">{{ text }}</p>
-        {%- endraw %}
     </div>
+    {%- endraw %}
 </script>
 
 {% endblock %}
 {% block body%}
 <div id="messages">
+    {% for message in channel['messages'] %}
+        <div class="text-box" data-id="{{message['id']}}">
+            {{message['user']}} {{message['timestamp']}}
+            
+            {% if message['user'] == session['user'] %}
+            <button class="delete">delete</button>
+            {% endif %}
+            <p class="text">{{ message['text'] }}</p>
+        </div>
+    {% endfor %}
 </div>
+
 <form id="message-form">
 
     <div class="form-group">

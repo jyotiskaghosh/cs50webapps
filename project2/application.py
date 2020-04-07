@@ -137,12 +137,4 @@ def delete(data):
             for message in channel['messages']:
                 if message['id'] == text_id:
                     channels[i]["messages"].remove(message)   
-
-@socketio.on("load")
-def load(data):
-
-    title = data["title"]
-
-    for channel in channels:
-        if channel["title"] == title:
-            emit("load", channel["messages"], broadcast=True)
+                    emit("delete", {'title': title, 'id': text_id}, broadcast=True)

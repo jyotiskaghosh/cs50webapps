@@ -11,14 +11,14 @@ Signup
 
         // Enable button only if there is text in the input field
         document.querySelector('#name').onkeyup = () => {
-            if (document.querySelector('#name').value.length > 0)
+            if (document.querySelector('#name').value.length > 0 && document.querySelector('#password').value.length > 0)
                 document.querySelector('#submit').disabled = false;
             else
                 document.querySelector('#submit').disabled = true;
         };
         
         document.querySelector('#password').onkeyup = () => {
-            if (document.querySelector('#password').value.length > 0)
+            if (document.querySelector('#password').value.length > 0 && document.querySelector('#name').value.length > 0)
                 document.querySelector('#submit').disabled = false;
             else
                 document.querySelector('#submit').disabled = true;
