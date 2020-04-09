@@ -27,19 +27,34 @@
 }
 
 .text-box {
-    background-color: yellow;
-    width: 80%;
+    border-radius: 25px;
+    box-shadow: 10px 10px 5px grey;
+    background-color:gainsboro;
     padding: 20px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom:25px;
+    margin-left: 35px;
+    margin-right: 35px;
     animation-name: hide;
     animation-duration: 2s;
     animation-fill-mode: forwards;
     animation-play-state: paused;
-    box-shadow: 7px 7px;
     margin: auto;
     word-wrap: break-word;
+    width: 80%;
 }
 
 body {
     padding-bottom: 50px;
+}
+
+form {
+    position: relative;
+}
+  
+#submit {
+    width: 10%;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
