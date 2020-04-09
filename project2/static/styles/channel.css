@@ -27,13 +27,17 @@
 }
 
 .text-box {
-    background-color: #77dd11;
+    background-color: yellow;
+    width: 80%;
     padding: 20px;
     margin-bottom: 10px;
     animation-name: hide;
     animation-duration: 2s;
     animation-fill-mode: forwards;
     animation-play-state: paused;
+    box-shadow: 7px 7px;
+    margin: auto;
+    word-wrap: break-word;
 }
 
 body {

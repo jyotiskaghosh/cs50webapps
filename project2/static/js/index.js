@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.replace('/channel/' + channel);   
     }
 
+    document.querySelector('#logout').addEventListener('click', () => {
+        localStorage.removeItem('last-visited');
+    })
+
     // By default, submit button is disabled
     document.querySelector('#submit').disabled = true;
 

@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
-        {% block head %}
-        {% endblock %}
-    </head>
-    <body>
-        <div class="container">
-            {% if 'user' in session %}
-                <a id="home" href="{{url_for('index')}}"><span class="glyphicon glyphicon-log-out"></span> Home   </a>
-                <a id="logout" href="{{url_for('logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout   </a>
-            {% else %}
-                <a href="{{url_for('login')}}"><span class="glyphicon glyphicon-log-in"></span> Login   </a>
-                <a href="{{url_for('signup')}}"><span class="glyphicon glyphicon-pencil"></span> Signup</a>
-            {% endif %}
-            {% block body %}
-            {% endblock %}
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <nav class="nav navbar-expand-sm navbar-light bg-light">
+        <a class="navbar-brand h3" href="#"  style="font-size: 25px; margin-left:20px; width: 100%;"><em>ChatHavan</em></a>
+        <div class="collapse navbar-collapse" >
+            <ul class="navbar-nav ml-auto">
+                {% if 'user' in session %}
+                    <li class="nav-item"> <a id="home" href="{{url_for('index')}}" class="nav-link bold
+                    "><span class="glyphicon glyphicon-log-out"></span><strong>Home</strong> </a></li>
+        
+                    <li class="nav-item"><a id="logout" href="{{url_for('logout')}}" class="nav-link bold"><span class="glyphicon glyphicon-log-out"></span><strong> Logout </strong>  </a></li>
+                {% else %}
+                    <li class="nav-item">  <a href="{{url_for('login')}}" class="nav-link bold"><span class="glyphicon glyphicon-log-in"></span><strong>Login </strong>   </a></li>
+                    <li class="nav-item"><a href="{{url_for('signup')}}" class="nav-link"><span class="glyphicon glyphicon-pencil"></span><strong> Signup</strong></a></li>
+                {% endif %}
+        
+            </ul>
         </div>
-    </body>
+    </nav>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+    {% endblock %}
+</body>
 </html>

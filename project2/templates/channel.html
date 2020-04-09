@@ -25,15 +25,16 @@
 
 <script id="my-message" type="text/x-handlebars-template">
     {% raw -%}
-    <div class="text-box" data-id="{{id}}">
+    <div class="text-box " data-id="{{id}}">
         {{ user }} {{timestamp}}<button class="delete">delete</button>
-        <p class="text">{{ text }}</p>
+        <p  class="text ">{{ text }}</p>
     </div>
     {%- endraw %}
 </script>
 
 {% endblock %}
 {% block body%}
+<h5 style="margin-bottom: 30px; text-align: center;">MESSAGES</h5>
 <div id="messages">
     {% for message in channel['messages'] %}
         <div class="text-box" data-id="{{message['id']}}">
@@ -50,11 +51,11 @@
 <form id="message-form">
 
     <div class="form-group">
-        <input class="form-control" id="text" placeholder="Type message">
+        <input style="margin: 30px" class="form-control" id="text" placeholder="Type message">
     </div>
 
     <div class="form-group">
-        <button class="btn btn-primary" id="submit">Submit</button>
+        <button  style="margin-left: 40px" class="btn btn-primary" id="submit">Submit</button>
     </div>
 
 </form>

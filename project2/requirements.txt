@@ -1,5 +1,5 @@
 Flask
 Flask-SocketIO
-functools
+requests
 flask_session
 datetime

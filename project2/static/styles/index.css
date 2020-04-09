@@ -1,0 +1,11 @@
+.channel {
+    position: relative;
+    background-color: yellow;
+    width: 80%;
+    padding: 20px;
+    margin-bottom: 25px;
+    text-align: center;
+    box-shadow: 7px 7px;
+    margin: auto;
+    word-wrap: break-word;
+}
