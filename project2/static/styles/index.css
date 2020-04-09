@@ -19,7 +19,7 @@ form {
     position: relative;
 }
   
-button {
+#submit {
     width: 10%;
     position: absolute;
     top: 0;
