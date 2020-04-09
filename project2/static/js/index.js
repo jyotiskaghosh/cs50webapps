@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let channel = localStorage.getItem('last-visited');   
         window.location.replace('/channel/' + channel);   
     }
+    
+    document.querySelector('#logout').addEventListener('click', () => {
+        localStorage.removeItem('last-visited');
+    })
 
     document.querySelector('#logout').addEventListener('click', () => {
         localStorage.removeItem('last-visited');
