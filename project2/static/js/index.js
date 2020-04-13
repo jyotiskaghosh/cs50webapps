@@ -19,6 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 });
 
+document.querySelector('#home').addEventListener('click', () => {
+    localStorage.removeItem('last-visited');
+});
+
 document.querySelector('#logout').addEventListener('click', () => {
     localStorage.removeItem('last-visited');
 });
