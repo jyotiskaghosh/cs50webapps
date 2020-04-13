@@ -5,14 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let channel = localStorage.getItem('last-visited');   
         window.location.replace('/channel/' + channel);   
     }
-    
-    document.querySelector('#logout').addEventListener('click', () => {
-        localStorage.removeItem('last-visited');
-    })
-
-    document.querySelector('#logout').addEventListener('click', () => {
-        localStorage.removeItem('last-visited');
-    })
 
     // By default, submit button is disabled
     document.querySelector('#submit').disabled = true;
@@ -25,4 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('#submit').disabled = false;
 
     };
+});
+
+document.querySelector('#logout').addEventListener('click', () => {
+    localStorage.removeItem('last-visited');
 });
