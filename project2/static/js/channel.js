@@ -6,14 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Connect to websocket
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port); 
 
-    document.querySelector('#home').addEventListener('click', () => {
-        localStorage.removeItem('last-visited');
-    })
-
-    document.querySelector('#logout').addEventListener('click', () => {
-        localStorage.removeItem('last-visited');
-    })
-
     // Enable button only if there is text in the input field
     document.querySelector('#text').onkeyup = () => {
         if (document.querySelector('#text').value.length > 0)
@@ -81,11 +73,19 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add post to DOM.
         document.querySelector('#messages').innerHTML += message;
     }
-
-    function pop_message(element) {
-        element.style.animationPlayState = 'running';
-            element.addEventListener('animationend', () =>  {
-                element.remove();
-        });
-    }
 });
+
+document.querySelector('#home').addEventListener('click', () => {
+    localStorage.removeItem('last-visited');
+});
+
+document.querySelector('#logout').addEventListener('click', () => {
+    localStorage.removeItem('last-visited');
+});
+
+function pop_message(element) {
+    element.style.animationPlayState = 'running';
+        element.addEventListener('animationend', () =>  {
+            element.remove();
+    });
+}
