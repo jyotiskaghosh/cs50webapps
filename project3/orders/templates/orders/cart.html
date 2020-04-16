@@ -1,0 +1,79 @@
+{% extends 'orders/base.html'%}
+{% load static %}
+
+{% block head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+
+<link rel= "stylesheet" type= "text/css" href= "{% static 'orders/css/cart.css' %}">
+
+<script src="{% static 'orders/js/cart.js' %}"></script>
+
+<script id="order" type="text/x-handlebars-template">
+    {% verbatim %}
+    <div id="{{id}}" class="order col-md-12">
+
+        <div class="sided-90x mb-30 ">
+            <div class="s-left"><img class="br-3" src="/static/{{img}}" alt="Menu Image"></div><!--s-left-->
+            
+            <div class="s-right">
+
+                    <button type="button" class="btn close" data-dismiss="modal" aria-label="Close"> 
+                    <span aria-hidden="true">×</span> 
+                    </button> 
+                    <h5 class="mb-10"><b class="name">{{name}}</b><b class="currency color-primary float-right">$</b><b class="price color-primary float-right">{{price}}</b></h5>
+                    <h6 class="mt-20"><button class="submit btn-brdr-primary plr-25 float-right">Order</button></h6>
+
+                    {{#if variations}}
+                    <select class="variations form-control w-50">
+                        {{#each variations}}
+                        <option value="{{name}} {{price}}">{{name}} ${{price}}</option>
+                        {{/each}}
+                    </select>
+                    {{/if}}
+
+                    {{#if topping_select}}
+                    <h5 class="mb-10"><b>Choose Toppings</b></h5>
+                    {{{topping_select}}}
+                    {{/if}}
+
+                    <h5 class="mb-10"><b>Choose Quantity</b></h5>
+                    <select class="quantity form-control w-50">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+
+            </div><!--s-right-->
+        </div><!-- sided-90x -->
+    </div>
+    {% endverbatim %}
+</script>
+
+<script id="toppings" type="text/x-handlebars-template">
+{% verbatim %}
+<select class="toppings form-control w-50">
+    {{#each toppings }}
+        <option value="{{name}}">{{name}}</option>
+    {{/each }}
+</select>
+{% endverbatim %}
+
+</script>
+
+
+{% endblock %}
+
+{% block content %}
+<section class="story-area left-text center-sm-text pos-relative">
+    <div class="abs-tbl bg-2 w-20 z--1 dplay-md-none"></div>
+    <div class="abs-tbr bg-3 w-20 z--1 dplay-md-none"></div>
+    <div class="container">
+            <div class="heading">
+                    <h2>Cart</h2>
+            </div>
+    </div><!-- container -->
+</section>
+
+<div class="container" id="cart"></div>
+{% endblock %}

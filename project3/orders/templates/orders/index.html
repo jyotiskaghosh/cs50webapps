@@ -1,0 +1,108 @@
+{% extends "orders/base.html" %}
+{% load static %}
+
+{% block head %}
+<script src="{% static 'orders/js/index.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+<section class="bg-1 h-900x main-slider pos-relative">
+        <div class="triangle-up pos-bottom"></div>
+        <div class="container h-100">
+                <div class="dplay-tbl">
+                        <div class="dplay-tbl-cell center-text color-white">
+
+                                <h5><b>BEST IN TOWN</b></h5>
+                                <h1 class="mt-30 mb-15">Pizza & Pasta</h1>
+                                <h5><a href="#menu" class="btn-primaryc plr-25"><b>GO TO MENU</b></a></h5>
+                        </div><!-- dplay-tbl-cell -->
+                </div><!-- dplay-tbl -->
+        </div><!-- container -->
+</section>
+
+
+<section class="story-area left-text center-sm-text pos-relative">
+        <div class="abs-tbl bg-2 w-20 z--1 dplay-md-none"></div>
+        <div class="abs-tbr bg-3 w-20 z--1 dplay-md-none"></div>
+        <div class="container">
+                <div class="heading">
+                        <img class="heading-img" src="{% static 'orders/images/heading_logo.png' %}" alt="">
+                        <h2>Our Story</h2>
+                </div>
+
+                <div class="row">
+                        <div class="col-md-6">
+                                <p class="mb-30">Maecenas fermentum tortor id fringilla molestie. In hac habitasse
+                                        platea dictumst. Morbi maximus
+                                        lobortis ipsum, ut blandit augue ullamcorper vitae.
+                                        Nulla dignissim leo felis, eget cursus elit aliquet ut. Curabitur vel convallis
+                                        massa. Morbi tellus
+                                        tortor, luctus et lacinia non, tincidunt in lacus.
+                                        Vivamus sed ligula imperdiet, feugiat magna vitae, blandit ex. Vestibulum id
+                                        dapibus dolor, ac
+                                        cursus nulla. </p>
+                        </div><!-- col-md-6 -->
+
+                        <div class="col-md-6">
+                                <p class="mb-30">Maecenas fermentum tortor id fringilla molestie. In hac habitasse platea
+                                        dictumst.Morbi maximus lobortis ipsum, ut blandit augue ullamcorper vitae.
+                                        Nulla dignissim leo felis, eget cursus elit aliquet ut. Curabitur vel
+                                        convallismassa. Morbi tellus tortor, luctus et lacinia non, tincidunt in lacus.
+                                        Vivamus sed ligula imperdiet, feugiat magna vitae, blandit ex. Vestibulumidda
+                                        pibus dolor, accursus nulla. </p>
+                        </div><!-- col-md-6 -->
+                </div><!-- row -->
+        </div><!-- container -->
+</section>
+
+<section id="menu">
+        <div class="container">
+                <div class="heading">
+                        <img class="heading-img" src="{% static 'orders/images/heading_logo.png' %}" alt="">
+                        <h2>Our Menu</h2>
+                </div>
+
+                <div class="row">
+                        <div class="col-sm-12">
+                                <ul class="selecton brdr-b-primary mb-70">
+                                        <li><a class="active" href="#" data-select="*"><b>ALL</b></a></li>
+                                        {% for menu in menus %}
+                                        <li><a href="#" data-select="{{menu.no_space_name}}"><b>{{menu.name}}</b></a></li>
+                                        {% endfor %}
+                                </ul>
+                        </div><!--col-sm-12-->
+                </div><!--row-->
+
+                <div class="row">
+                {% for menu in menus %}
+                {% for item in menu.menu_items.all %}
+                
+                        <div class="col-md-6 food-menu {{menu.no_space_name}}">
+
+                                <div class="sided-90x mb-30 ">
+                                        <div class="s-left"><img class="br-3" src="{% static item.img %}" alt="Menu Image"></div><!--s-left-->
+                                        
+                                        <div class="s-right">
+                                                <h5 class="mb-10"><b>{{item.name}}</b><b class="currency color-primary float-right">$</b><b class="price color-primary float-right">{{item.price}}</b></h5>
+                                                <h6 class="mt-20"><button type="button" data-id="{{item.id}}" class="cart-add btn-brdr-primary plr-25 float-right">Add To Cart</button></h6>
+                                                <p class="pr-70">{{item.description}}</p>
+                                                {% if item.variations.all|length > 0 %}
+                                                <select class="variations form-control w-50">
+                                                        {% for variation in item.variations.all %}
+                                                        <option value="{{variation.name }} {{variation.price}}">{{variation.name}} ${{variation.price}}</option>
+                                                        {% endfor %}
+                                                </select>
+                                                {% endif %} 
+						
+                                        </div><!--s-right-->
+                                </div><!-- sided-90x -->
+                        </div>
+                {% endfor %}
+                {% endfor %}
+                </div>
+
+        </div><!-- container -->
+</section>
+
+{% endblock %}
