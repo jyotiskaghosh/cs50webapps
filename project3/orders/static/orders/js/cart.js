@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    var csrftoken = Cookies.get('csrftoken');
+
     var cart = []
 
     if (!localStorage.getItem('cart')) {
@@ -18,12 +20,15 @@ document.addEventListener('DOMContentLoaded', () => {
     toppingsreq.send()
 
     cart.forEach( item => {
-        var reqitem = new XMLHttpRequest();
-        reqitem.open('GET', '/api/item/'+item.id);
-        reqitem.onload = () => {
-            add_order(JSON.parse(reqitem.responseText));
-        };
-        reqitem.send()
+
+        if (item.user == user) {
+            var reqitem = new XMLHttpRequest();
+            reqitem.open('GET', '/api/item/'+item.id);
+            reqitem.onload = () => {
+                add_order(JSON.parse(reqitem.responseText));
+            };
+            reqitem.send()
+        }
     })
 
     const order_template = Handlebars.compile(document.querySelector('#order').innerHTML);
@@ -53,10 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', event => {
 
         const element = event.target;
+        var parent = element.parentElement.parentElement.parentElement.parentElement;
 
         if (element.className.includes('submit')) {
-
-            var parent = element.parentElement.parentElement.parentElement.parentElement;
 
             var name = parent.querySelector('.name').innerHTML;
 
@@ -80,11 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
             var send_order = new XMLHttpRequest();
             send_order.open('POST', '/order/');
-            send_order.onload = () => {
-                let response = JSON.parse(send_order.responseText);
-                if (response.success) {
+            send_order.setRequestHeader("X-CSRFToken", csrftoken);
+            send_order.onload = function() {
+                let response = JSON.parse(this.responseText);
+                if (this.readyState == 4 && this.status == '200') {
                     cart.forEach( item => {
-                            if (item.id == response.id) {
+                            if (item.id == parent.getAttribute('id')) {
                                 cart.splice(cart.indexOf(item), 1);
                             }
                         }
@@ -92,14 +97,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('cart', JSON.stringify(cart));
                     pop_order(parent);
                 }
-                else
-                    alert(response.error);
             };
             send_order.send(JSON.stringify(json));
         }
         
         if (element.parentElement.className.includes('close')) {
-            var parent = element.parentElement.parentElement.parentElement.parentElement;
             cart.forEach( item => {
                     if (item.id == parent.getAttribute('id')) {
                         cart.splice(cart.indexOf(item), 1);
@@ -112,18 +114,26 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 })
 
-
-
 // listen for change event
 document.addEventListener('change', event => {
     const element = event.target;
     
-    // change price according to variation
-    if (element.className.includes('variations')) {
-        parent = element.parentElement;
-        value = element.value.split(' ')
-        parent.querySelector('.price').innerHTML = value[1];
+    // change price according to variation and quantity
+    parent = element.parentElement;
+    value = element.value.split(' ');
+    
+    var quantity = parent.querySelector('.quantity').value;
+
+    if (parent.querySelector('.variations')) {
+        var var_price = parent.querySelector('.variations').value.split(' ')[1];
+        var price = var_price * quantity;
     }
+    else {
+        var price = parseInt(parent.querySelector('.price').innerHTML) * quantity
+    }
+    
+    parent.querySelector('.price').innerHTML = price.toFixed(2);
+
 })
 
 function pop_order(element) {

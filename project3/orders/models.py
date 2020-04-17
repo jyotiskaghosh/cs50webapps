@@ -42,14 +42,14 @@ class AbstractItem(models.Model):
 class Order(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
-    description = models.CharField(max_length=100, default="enter descriotion")
+    description = models.CharField(max_length=100, default="enter description")
     datetime = models.DateTimeField(auto_now=True)
     price = models.FloatField()
     completed = models.BooleanField(default=False)
     quantity = models.IntegerField(default=1)
 
     def __str__(self):
-        return f"""user {self.user} has ordered {self.description} at {self.datetime}.
+        return f"""user {self.user} has ordered ({self.description}) x {self.quantity} at {self.datetime}.
         price of order: {self.price}"""
 
 # menu item

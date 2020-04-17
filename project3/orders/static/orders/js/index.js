@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 variation = value[0]
             }
              
-            item = {'id': id, 'variation': variation};
+            item = {'user': user, 'id': id, 'variation': variation};
             
             cart.push(item);
             localStorage.setItem('cart', JSON.stringify(cart));

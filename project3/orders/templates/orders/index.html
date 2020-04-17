@@ -3,6 +3,13 @@
 
 {% block head %}
 <script src="{% static 'orders/js/index.js' %}"></script>
+
+{% if user.is_authenticated %}
+<script>
+    var user = "{{user.get_username}}"; 
+</script>
+{% endif %}
+
 {% endblock %}
 
 {% block content %}
@@ -85,7 +92,11 @@
                                         
                                         <div class="s-right">
                                                 <h5 class="mb-10"><b>{{item.name}}</b><b class="currency color-primary float-right">$</b><b class="price color-primary float-right">{{item.price}}</b></h5>
-                                                <h6 class="mt-20"><button type="button" data-id="{{item.id}}" class="cart-add btn-brdr-primary plr-25 float-right">Add To Cart</button></h6>
+                                                
+                                                {% if user.is_authenticated %}
+                                                        <h6 class="mt-20"><button type="button" data-id="{{item.id}}" class="cart-add btn-brdr-primary plr-25 float-right">Add To Cart</button></h6>
+                                                {% endif %}
+
                                                 <p class="pr-70">{{item.description}}</p>
                                                 {% if item.variations.all|length > 0 %}
                                                 <select class="variations form-control w-50">

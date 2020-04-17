@@ -1,10 +1,10 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from django.http import Http404
 
 from .models import Menu, MenuItem, Topping, OrderItem, Order, Variation, Pizza
 
@@ -14,6 +14,7 @@ import json
 
 # Create your views here.
 
+# signup view
 class SignUpView(CreateView):
     form_class = SignUpForm
     success_url = reverse_lazy('login')
@@ -29,24 +30,29 @@ def index(request):
 
 # cart page
 @login_required
-@csrf_exempt
 def order(request):
 
     if request.method == 'POST':
         try:
             order = json.loads(request.body)
             menu_item = MenuItem.objects.get(name=order['name'])
-            variation = ''
 
             if order['variation'] != '':
                 variation = menu_item.variations.get(name=order['variation'])
                 order_price = variation.price * int(order['quantity'])
             else:
                 order_price = menu_item.price * int(order['quantity'])
-            
+
+            description = f"{menu_item.name}  {order['variation']},"
+            if len(order['toppings']) > 0:
+                description +=  " toppings: "
+                for topping in order['toppings']:
+                    description += topping['name'] + ", "
+
             order_obj = Order.objects.create(
                 user = request.user,
                 price = order_price,
+                description = description,
                 quantity = int(order['quantity'])
             )
             
@@ -58,7 +64,7 @@ def order(request):
                 order = order_obj
             )
 
-            if variation != '':
+            if order['variation'] != '':
                 Variation.objects.create(
                     name = variation.name,
                     price = variation.price,
@@ -73,18 +79,16 @@ def order(request):
                 for topping in order['toppings']:
                     Topping.objects.get(name=topping['name']).pizza.add(pizza)
         
-        except Exception as e:
-            return JsonResponse(
-                {
-                    'success': False,
-                    'error': str(e)
-                }
-            )
+        except:
+            return HttpResponse(status=500)
 
         return JsonResponse(
             {
-                'id': menu_item.id,
-                'success': True
+                'order': {
+                    'user': order_obj.user.username,
+                    'price': order_obj.price,
+                    'quantity': order_obj.quantity
+                }
             }
         )
     
@@ -103,11 +107,7 @@ def item_api(request, item_id):
     try:    
         item = MenuItem.objects.get(pk=item_id)
     except:
-        return JsonResponse(
-            {
-                'error': 'No item found' 
-            }
-        )
+        return HttpResponse(status=500)
 
     variations = []
     features = []
