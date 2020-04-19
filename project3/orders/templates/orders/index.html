@@ -85,7 +85,7 @@
                 {% for menu in menus %}
                 {% for item in menu.menu_items.all %}
                 
-                        <div class="col-md-6 food-menu {{menu.no_space_name}}">
+                        <div id="{{item.id}}" class="col-md-6 food-menu {{menu.no_space_name}}">
 
                                 <div class="sided-90x mb-30 ">
                                         <div class="s-left"><img class="br-3" src="{% static item.img %}" alt="Menu Image"></div><!--s-left-->
@@ -94,7 +94,7 @@
                                                 <h5 class="mb-10"><b>{{item.name}}</b><b class="currency color-primary float-right">$</b><b class="price color-primary float-right">{{item.price}}</b></h5>
                                                 
                                                 {% if user.is_authenticated %}
-                                                        <h6 class="mt-20"><button type="button" data-id="{{item.id}}" class="cart-add btn-brdr-primary plr-25 float-right">Add To Cart</button></h6>
+                                                        <h6 class="mt-20"><button type="button" class="cart-add btn-brdr-primary plr-25 float-right">Add To Cart</button></h6>
                                                 {% endif %}
 
                                                 <p class="pr-70">{{item.description}}</p>

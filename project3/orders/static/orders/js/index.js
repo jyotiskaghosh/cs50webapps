@@ -13,10 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
         item.addEventListener('click', function(e) {
             const element = e.target;
 
-            var id = element.getAttribute('data-id');
-
             // add item to cart in local storage
-            parent = element.parentElement.parentElement.parentElement;
+            
+            var parent = element.parentElement.parentElement.parentElement.parentElement;
+
+            var id = parent.getAttribute('id');
            
             variation = ''
             if (parent.querySelector('.variations') != null) {

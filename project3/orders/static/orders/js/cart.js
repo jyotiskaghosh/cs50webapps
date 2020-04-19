@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (element.className.includes('submit')) {
 
-            var name = parent.querySelector('.name').innerHTML;
+            var id = parent.getAttribute('id');
 
             var variation = ''
             if (parent.querySelector('.variations')) 
@@ -76,20 +76,20 @@ document.addEventListener('DOMContentLoaded', () => {
             var quantity = parent.querySelector('.quantity').value;
 
             var json = {
-                'name': name,
+                'id': id,
                 'variation': variation,
                 'toppings': topping_options,
                 'quantity': quantity
             }
         
             var send_order = new XMLHttpRequest();
-            send_order.open('POST', '/order/');
+            send_order.open('POST', '/api/order');
             send_order.setRequestHeader("X-CSRFToken", csrftoken);
             send_order.onload = function() {
                 let response = JSON.parse(this.responseText);
                 if (this.readyState == 4 && this.status == '200') {
                     cart.forEach( item => {
-                            if (item.id == parent.getAttribute('id')) {
+                            if (item.id == id) {
                                 cart.splice(cart.indexOf(item), 1);
                             }
                         }

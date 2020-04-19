@@ -1,0 +1,33 @@
+{% extends "orders/base.html" %}
+{% load static %}
+
+{% block head %}
+<script src="{% static 'orders/js/display_orders.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<section class="story-area left-text center-sm-text pos-relative">
+    <div class="abs-tbl bg-2 w-20 z--1 dplay-md-none"></div>
+    <div class="abs-tbr bg-3 w-20 z--1 dplay-md-none"></div>
+    <div class="container">
+            <div class="heading">
+                    <h2>Orders History</h2>
+            </div>
+    </div><!-- container -->
+</section>
+
+<section id='orders'>
+    <div class="row">
+    {% for order in orders %}
+        <div id="{{order.id}}" class="order col-md-12">
+                <button type="button" class="btn close" data-dismiss="modal" aria-label="Close"> 
+                <span aria-hidden="true">×</span> 
+                </button> 
+                <h5 class="mb-10"><b class="name">User: {{order.user.get_username}}</b></h5>
+                <h6 class="mt-20"><button class="submit btn-brdr-primary plr-25 float-right">Complete</button></h6>
+                <p class="pr-70">{{order}}</p>
+        </div>
+    {% endfor %}
+    </div>
+</section>
+{% endblock %}

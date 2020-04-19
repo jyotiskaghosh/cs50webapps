@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from django.http import Http404
+from django.contrib.auth.decorators import user_passes_test
 
 from .models import Menu, MenuItem, Topping, OrderItem, Order, Variation, Pizza
 
@@ -30,58 +30,78 @@ def index(request):
 
 # cart page
 @login_required
+def cart(request):
+
+    return render(request, 'orders/cart.html')
+
+# display orders placed
+@user_passes_test(lambda u: u.is_superuser)
+def display_orders(request):
+
+    context = {
+        'orders': Order.objects.filter(status='not completed')
+    }
+    return render(request, 'orders/display_orders.html', context)
+
+# display orders placed
+@login_required
+def orders_history(request):
+
+    context = {
+        'orders': Order.objects.filter(user=request.user)
+    }
+    return render(request, 'orders/history.html', context)
+
+# order api
+@login_required
 def order(request):
 
     if request.method == 'POST':
-        try:
-            order = json.loads(request.body)
-            menu_item = MenuItem.objects.get(name=order['name'])
+        order = json.loads(request.body)
+        menu_item = MenuItem.objects.get(pk=int(order['id']))
 
-            if order['variation'] != '':
-                variation = menu_item.variations.get(name=order['variation'])
-                order_price = variation.price * int(order['quantity'])
-            else:
-                order_price = menu_item.price * int(order['quantity'])
+        if order['variation'] != '':
+            variation = menu_item.variations.get(name=order['variation'])
+            order_price = variation.price * int(order['quantity'])
+        else:
+            order_price = menu_item.price * int(order['quantity'])
 
-            description = f"{menu_item.name}  {order['variation']},"
-            if len(order['toppings']) > 0:
-                description +=  " toppings: "
-                for topping in order['toppings']:
-                    description += topping['name'] + ", "
+        description = f"{menu_item.name}  {order['variation']},"
+        if len(order['toppings']) > 0:
+            description +=  " toppings: "
+            for topping in order['toppings']:
+                description += topping['name'] + ", "
 
-            order_obj = Order.objects.create(
-                user = request.user,
-                price = order_price,
-                description = description,
-                quantity = int(order['quantity'])
-            )
-            
-            order_item = OrderItem.objects.create(
-                name = menu_item.name,
-                category = menu_item.category,
-                veg = menu_item.veg,
-                price = menu_item.price,
-                order = order_obj
-            )
-
-            if order['variation'] != '':
-                Variation.objects.create(
-                    name = variation.name,
-                    price = variation.price,
-                    order_item = order_item
-                )
-
-            if len(order['toppings']) > 0:
-                pizza = Pizza.objects.create(
-                    order_item = order_item,
-                    num_of_toppings = len(order['toppings'])
-                )
-                for topping in order['toppings']:
-                    Topping.objects.get(name=topping['name']).pizza.add(pizza)
+        order_obj = Order.objects.create(
+            user = request.user,
+            price = round(order_price, 2),
+            description = description,
+            quantity = int(order['quantity'])
+        )
         
-        except:
-            return HttpResponse(status=500)
+        order_item = OrderItem.objects.create(
+            name = menu_item.name,
+            category = menu_item.category,
+            veg = menu_item.veg,
+            price = menu_item.price,
+            order = order_obj
+        )
 
+        if order['variation'] != '':
+            Variation.objects.create(
+                name = variation.name,
+                price = variation.price,
+                order_item = order_item
+            )
+
+        if len(order['toppings']) > 0:
+            pizza = Pizza.objects.create(
+                order_item = order_item,
+                num_of_toppings = len(order['toppings'])
+            )
+            for topping in order['toppings']:
+                Topping.objects.get(name=topping['name']).pizza.add(pizza)
+    
         return JsonResponse(
             {
                 'order': {
@@ -91,15 +111,16 @@ def order(request):
                 }
             }
         )
-    
-    else:
-        return render(request, 'orders/cart.html')
 
-# logout
-@login_required
-def logout_view(request):
-    logout(request)
-    return redirect(request, 'index')
+# update status
+@user_passes_test(lambda u: u.is_superuser)
+def update_order(request):
+
+    if request.method == 'POST':
+        order = json.loads(request.body)
+        Order.objects.filter(pk=int(order['id'])).update(status=order['status'])
+
+        return JsonResponse(order)
 
 # menu items api
 def item_api(request, item_id):
@@ -177,3 +198,9 @@ def menus_api(request):
         },
         safe=False
     )
+
+# logout
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('index')

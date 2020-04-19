@@ -45,7 +45,14 @@ class Order(models.Model):
     description = models.CharField(max_length=100, default="enter description")
     datetime = models.DateTimeField(auto_now=True)
     price = models.FloatField()
-    completed = models.BooleanField(default=False)
+    status = models.CharField(max_length=20,
+        choices=[
+            ('completed','completed'),
+            ('not completed','not completed'),
+            ('cancelled','cancelled')
+        ],
+        default='not completed'
+    )
     quantity = models.IntegerField(default=1)
 
     def __str__(self):
@@ -61,7 +68,7 @@ class MenuItem(AbstractItem):
 # order item
 class OrderItem(AbstractItem):
 
-    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='order')
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='order_item')
     
 # variation
 class Variation(models.Model):
